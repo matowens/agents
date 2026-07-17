@@ -1,6 +1,6 @@
 # Repository Guidance
 
-This repository is the canonical source for personal AI agent definitions. Edit source files here, never deployed copies under `~/.codex/agents` or `~/.claude/agents`, then use the repository installer and verify source/target hashes.
+This repository is the canonical source for personal AI agent definitions. Edit source files here, never the linked entries under `~/.codex/agents` or `~/.claude/agents`. Use the repository installer once to create live links and run `install.cmd --check` to verify them.
 
 ## Workflow language and boundaries
 

@@ -27,11 +27,14 @@ agents/
 |-- claude/
 |   `-- qa-engineer.md
 |-- install.cmd
-|-- install.ps1
+|-- scripts/
+|   `-- install_agents.mjs
+|-- tests/
+|   `-- installer.test.mjs
 `-- README.md
 ```
 
-The repository is platform-neutral. Agent definitions are installed into the locations expected by each tool:
+Agent definitions remain in their provider-native formats. The Windows installer creates individual file links in the locations expected by each tool:
 
 - Codex: `~/.codex/agents/`
 - Claude Code: `~/.claude/agents/`
@@ -44,15 +47,17 @@ From Command Prompt in the repository root, run:
 install.cmd
 ```
 
-The command wrapper invokes the PowerShell installer, so the deployment logic remains in one place. Alternatively, from PowerShell, run:
+The command invokes a dependency-free Node installer that creates live symbolic links for the two approved agents. Windows Developer Mode must be enabled, or Command Prompt must run as Administrator when the links are first created.
 
-```powershell
-.\install.ps1
+Verify the links without changing anything:
+
+```batch
+install.cmd --check
 ```
 
-The installer creates the destination directories, copies the current definitions, and removes stale files that it previously installed. It tracks only repository-managed files and leaves unrelated agents alone.
+Installation is idempotent: correct links are left unchanged, missing links are created, and a same-name file or incorrect link is reported as a conflict without being overwritten. Unrelated agents in either provider directory are preserved.
 
-Run the installer after pulling changes or editing an agent definition.
+Edits to an existing source definition are immediately visible through its live link, so pulls and source changes do not require another installation. Codex or Claude may still require a new session or application restart to reload a changed definition.
 
 ## Available agents
 
@@ -95,4 +100,14 @@ For an on-demand review, Codex supplies a concrete change boundary and objective
 
 ## Adding an agent
 
-Add the source definition beneath the directory for its runtime, then run `install.cmd` from Command Prompt or `install.ps1` from PowerShell. Keep each role narrow and opinionated, describe when it should be used, define whether it may write files, and require a predictable handoff. Keep reusable procedural knowledge in the skills repository rather than duplicating it across agent prompts.
+Adding an agent is a deliberate repository change. Add its provider-native source definition, add its explicit source-to-destination mapping to the installer, update the installer tests, and run `install.cmd` once to create the new link. Existing agent links never need to be recreated after source edits.
+
+Keep each role narrow and opinionated, describe when it should be used, define whether it may write files, and require a predictable handoff. Keep reusable procedural knowledge in the skills repository rather than duplicating it across agent prompts.
+
+## Development and validation
+
+Run all repository tests from the repository root:
+
+```text
+node --test tests/*.test.mjs
+```

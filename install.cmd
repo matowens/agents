@@ -1,3 +1,3 @@
 @echo off
-powershell.exe -NoProfile -File "%~dp0install.ps1" %*
+node "%~dp0scripts\install_agents.mjs" %*
 exit /b %ERRORLEVEL%
