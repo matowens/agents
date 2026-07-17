@@ -70,7 +70,7 @@ Configured model: `gpt-5.4` with `medium` reasoning effort.
 
 Source: [`claude/qa-engineer.md`](claude/qa-engineer.md)
 
-The QA Engineer independently reviews one completed Task. It validates acceptance criteria, correctness, edge cases, regressions, test quality, maintainability, scope, and relevant documentation. It reports evidence-based blocking findings separately from optional observations and never modifies files.
+The QA Engineer independently reviews one bounded formal Task or one bounded one-off change set. It validates the supplied Acceptance Criteria or review objective, correctness, edge cases, regressions, test quality, maintainability, scope, and relevant documentation. It reports evidence-based blocking findings separately from optional observations and never modifies files.
 
 Configured model: Claude Sonnet with `high` effort. Its permission mode is `plan`, and edit/write tools are explicitly disabled.
 
@@ -90,6 +90,8 @@ Every review ends with one recommendation:
 6. Corrected work returns to Claude for another independent review.
 
 Codex remains responsible for orchestration, scope, final acceptance, commits, releases, and communication with the user.
+
+For an on-demand review, Codex supplies a concrete change boundary and objective instead of a Task Specification. The QA Engineer applies the same evidence standards and remains read-only.
 
 ## Adding an agent
 
