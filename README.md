@@ -6,7 +6,7 @@ Reusable skills and domain-specific workflows live in a separate skills reposito
 
 ## Architecture
 
-Codex Desktop is the lead orchestrator. It defines bounded implementation checkpoints, delegates code changes to the Codex Software Engineer, invokes the Claude QA Engineer for independent review, evaluates the findings, and directs any correction cycle.
+Codex Desktop is the lead orchestrator. It defines bounded implementation Tasks, delegates code changes to the Codex Software Engineer, invokes the Claude QA Engineer for independent review, evaluates the findings, and directs any correction cycle.
 
 ```text
 User
@@ -60,7 +60,7 @@ Run the installer after pulling changes or editing an agent definition.
 
 Source: [`codex/software-engineer.toml`](codex/software-engineer.toml)
 
-The Software Engineer implements exactly one approved checkpoint at a time. It inspects the existing code, makes production-quality changes, writes or updates meaningful tests, runs relevant verification, and reports its decisions and unresolved concerns to the lead.
+The Software Engineer implements exactly one approved Task at a time. It inspects the existing code, makes production-quality changes, writes or updates meaningful tests, runs relevant verification, and reports its decisions and unresolved concerns to the lead.
 
 It is the only subagent permitted to modify project files. It does not expand scope, create worktrees, commit, release, or accept its own work.
 
@@ -70,7 +70,7 @@ Configured model: `gpt-5.4` with `medium` reasoning effort.
 
 Source: [`claude/qa-engineer.md`](claude/qa-engineer.md)
 
-The QA Engineer independently reviews one completed checkpoint. It validates acceptance criteria, correctness, edge cases, regressions, test quality, maintainability, scope, and relevant documentation. It reports evidence-based blocking findings separately from optional observations and never modifies files.
+The QA Engineer independently reviews one completed Task. It validates acceptance criteria, correctness, edge cases, regressions, test quality, maintainability, scope, and relevant documentation. It reports evidence-based blocking findings separately from optional observations and never modifies files.
 
 Configured model: Claude Sonnet with `high` effort. Its permission mode is `plan`, and edit/write tools are explicitly disabled.
 
@@ -82,11 +82,11 @@ Every review ends with one recommendation:
 
 ## Intended workflow
 
-1. Codex defines a bounded checkpoint with acceptance criteria.
-2. The Software Engineer implements and tests that checkpoint.
-3. Codex invokes the Claude QA Engineer with the checkpoint, acceptance criteria, review boundary, changed files, and implementation handoff.
+1. Codex defines a bounded Task with acceptance criteria.
+2. The Software Engineer implements and tests that Task.
+3. Codex invokes the Claude QA Engineer with the Task, acceptance criteria, review boundary, changed files, and implementation handoff.
 4. Claude independently reviews the work and returns evidence-based findings.
-5. Codex either accepts the checkpoint or assigns focused corrections to the Software Engineer.
+5. Codex either accepts the Task or assigns focused corrections to the Software Engineer.
 6. Corrected work returns to Claude for another independent review.
 
 Codex remains responsible for orchestration, scope, final acceptance, commits, releases, and communication with the user.
